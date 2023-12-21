@@ -17,4 +17,8 @@ public class ProjectService {
     public List<Project> getProjects(){
         return projectRepository.findAll();
     }
+
+    public void addProject(Project project){
+        projectRepository.save(project);
+    }
 }
