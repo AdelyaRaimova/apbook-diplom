@@ -18,6 +18,10 @@ public class ProjectService {
         return projectRepository.findAll();
     }
 
+    public Project getProject(long id){
+        return projectRepository.findById(id).get();
+    }
+
     public void addProject(Project project){
         projectRepository.save(project);
     }
