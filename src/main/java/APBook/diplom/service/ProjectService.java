@@ -14,23 +14,27 @@ public class ProjectService {
         this.projectRepository = projectRepository;
     }
 
-    public List<Project> getProjects(){
+    public List<Project> getAll(){
         return projectRepository.findAll();
     }
 
-    public Project getProject(long id){
+    public Project get(long id){
         return projectRepository.findById(id).get();
     }
 
-    public void addProject(Project project){
+    public void add(Project project){
         projectRepository.save(project);
     }
 
-    public void updateProject(long id, Project project){
+    public void update(long id, Project project){
         Project uProject = projectRepository.findById(id).get();
         uProject.setName(project.getName());
         uProject.setDescription(project.getDescription());
         projectRepository.save(uProject);
+    }
+
+    public void delete(long id){
+        projectRepository.deleteById(id);
     }
 
 }
