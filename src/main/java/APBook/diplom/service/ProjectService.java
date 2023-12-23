@@ -26,5 +26,11 @@ public class ProjectService {
         projectRepository.save(project);
     }
 
+    public void updateProject(long id, Project project){
+        Project uProject = projectRepository.findById(id).get();
+        uProject.setName(project.getName());
+        uProject.setDescription(project.getDescription());
+        projectRepository.save(uProject);
+    }
 
 }

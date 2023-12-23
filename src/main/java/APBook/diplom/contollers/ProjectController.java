@@ -2,12 +2,14 @@ package APBook.diplom.contollers;
 
 import APBook.diplom.models.Project;
 import APBook.diplom.service.ProjectService;
+import io.swagger.annotations.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/project")
 public class ProjectController {
     private final ProjectService projectService;
@@ -27,9 +29,12 @@ public class ProjectController {
     }
 
     @PostMapping
-    public void addProject(@RequestBody Project project){
+    public void add(@RequestBody Project project){
         projectService.addProject(project);
     }
 
-
+    @PutMapping("/{id}")
+    public void update(@PathVariable long id, @RequestBody Project project){
+        projectService.updateProject(id, project);
+    }
 }
