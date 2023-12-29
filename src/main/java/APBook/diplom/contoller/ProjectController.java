@@ -1,10 +1,10 @@
-package APBook.diplom.contollers;
+package APBook.diplom.contoller;
 
+import APBook.diplom.models.Photo;
 import APBook.diplom.models.Project;
 import APBook.diplom.service.ProjectService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.Tag;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,12 +40,15 @@ public class ProjectController {
 
     }
 
+    @GetMapping("/{id}/photos")
+    public ResponseEntity<List<Photo>> showAllPhotos(@PathVariable long id){
+        return new ResponseEntity(projectService.getAllPhotos(id), HttpStatus.OK);
+    }
+
     @PostMapping
     @ApiOperation(value = "Добавление проекта")
-    public ResponseEntity<String> add(@RequestBody Project project){
-        projectService.add(project);
-        String createdObject = "Проект успешно создан";
-        return new ResponseEntity<>(createdObject, HttpStatus.CREATED);
+    public ResponseEntity<Project> add(@RequestBody Project project){
+        return new ResponseEntity<>(projectService.add(project), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

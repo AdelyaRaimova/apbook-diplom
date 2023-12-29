@@ -9,6 +9,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class ApBookApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(ApBookApplication.class, args);
 	}
 
