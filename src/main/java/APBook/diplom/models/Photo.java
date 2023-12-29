@@ -25,7 +25,9 @@ public class Photo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="photo_id")
     private Long id;
+
     private String link;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name="project_id", nullable=true)
@@ -33,8 +35,5 @@ public class Photo {
 
     public Photo() {
 
-    }
-    public Photo(String link) {
-        this.link = link;
     }
 }

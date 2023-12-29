@@ -5,6 +5,7 @@ import APBook.diplom.models.Project;
 import APBook.diplom.service.ProjectService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@Slf4j
 @CrossOrigin
 @RequestMapping("/api/project")
 @Api(tags = "Проекты")
@@ -31,34 +33,54 @@ public class ProjectController {
 
     @GetMapping("/{id}")
     @ApiOperation(value = "Получение одного проекта")
-    public ResponseEntity<Project> show(@PathVariable long id){
+    public ResponseEntity<Project> show(@PathVariable Long id){
         try {
             return new ResponseEntity(projectService.get(id), HttpStatus.OK);
         } catch (Exception exception){
+            log.error("Не удалось получить проект с идентификатором: {}", id, exception );
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-
     }
 
     @GetMapping("/{id}/photos")
-    public ResponseEntity<List<Photo>> showAllPhotos(@PathVariable long id){
-        return new ResponseEntity(projectService.getAllPhotos(id), HttpStatus.OK);
+    @ApiOperation(value = "Получение всех фотографий проекта")
+    public ResponseEntity<List<Photo>> showAllPhotos(@PathVariable Long id){
+        try {
+            List<Photo> photos = projectService.getAllPhotos(id);
+            return new ResponseEntity<>(photos, HttpStatus.OK);
+        } catch (Exception exception) {
+            log.error("Не удалось получить фотографии для проекта с идентификатором: {}", id, exception);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping
     @ApiOperation(value = "Добавление проекта")
     public ResponseEntity<Project> add(@RequestBody Project project){
-        return new ResponseEntity<>(projectService.add(project), HttpStatus.CREATED);
+        try {
+            Project addedProject = projectService.add(project);
+            return new ResponseEntity<>(addedProject, HttpStatus.CREATED);
+        } catch (Exception exception) {
+            log.error("Не удалось добавить проект", exception);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PutMapping("/{id}")
     @ApiOperation(value = "Изменение проекта")
-    public ResponseEntity<String> update(@PathVariable long id, @RequestBody Project project){
-        if(project.getId().equals(id)){
-            projectService.update(id, project);
-            return new ResponseEntity<>("Проект изменен", HttpStatus.OK);
+    public ResponseEntity<?> update(@PathVariable long id, @RequestBody Project project){
+        try {
+            if (project.getId().equals(id)) {
+                Project updatedProject = projectService.update(id, project);
+                return new ResponseEntity<>(updatedProject, HttpStatus.OK);
+            } else {
+                log.warn("Номера не совпадают");
+                return new ResponseEntity<>("Номера не совпадают", HttpStatus.BAD_REQUEST);
+            }
+        } catch (Exception exception) {
+            log.error("Не удалось обновить проект", exception);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
-        return new ResponseEntity<>("Номера не совпадают", HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/{id}")
@@ -70,7 +92,5 @@ public class ProjectController {
         } catch (EmptyResultDataAccessException ex){
             return new ResponseEntity<>("Проект не найден", HttpStatus.NOT_FOUND);
         }
-
-
     }
 }
