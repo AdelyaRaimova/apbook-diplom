@@ -3,6 +3,7 @@ package APBook.diplom.service;
 import APBook.diplom.models.Photo;
 import APBook.diplom.models.Project;
 import APBook.diplom.repository.ProjectRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @Service
+@Slf4j
 @Transactional
 public class ProjectService {
     private final ProjectRepository projectRepository;
@@ -42,6 +44,17 @@ public class ProjectService {
         }
         projectRepository.save(project);
         return project;
+    }
+
+    public Photo addPhoto(Long id, Photo photo) {
+        Project project = projectRepository.findById(id).orElse(null);
+        if(project == null){
+            log.error("Проект не найден");
+            return null;
+        }
+        photo.setProject(project);
+        photoService.add(photo);
+        return photo;
     }
 
     public Project update(long id, Project project) {
