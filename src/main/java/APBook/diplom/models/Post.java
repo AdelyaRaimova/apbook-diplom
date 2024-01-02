@@ -1,12 +1,10 @@
 package APBook.diplom.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.lang.Nullable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,30 +12,27 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.List;
 
 @Entity
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-@Table(name="photos")
-
-public class Photo {
+@Table(name = "posts")
+public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="photo_id")
+    @Column(name="post_id")
     private Long id;
 
-    private String link;
+    private String text;
+
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Photo> photos;
 
     @JsonIgnore
     @ManyToOne
-    @JoinColumn(name="project_id", nullable=true)
+    @JoinColumn(name="project_id")
     private Project project;
-
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name="post_id", nullable=true)
-    private Post post;
 }

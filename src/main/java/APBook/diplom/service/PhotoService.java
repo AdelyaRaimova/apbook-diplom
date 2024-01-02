@@ -4,7 +4,7 @@ import APBook.diplom.models.Photo;
 import APBook.diplom.repository.PhotoRepository;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
@@ -27,6 +27,5 @@ public class PhotoService {
     public void delete(Long id){
         photoRepository.deleteById(id);
     }
-
 
 }

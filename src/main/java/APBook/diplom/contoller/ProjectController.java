@@ -1,6 +1,7 @@
 package APBook.diplom.contoller;
 
 import APBook.diplom.models.Photo;
+import APBook.diplom.models.Post;
 import APBook.diplom.models.Project;
 import APBook.diplom.service.ProjectService;
 import io.swagger.annotations.Api;
@@ -55,6 +56,18 @@ public class ProjectController {
         }
     }
 
+    @GetMapping("/{id}/post")
+    @ApiOperation(value = "Получение всех постов проекта")
+    public ResponseEntity<?> showAllPosts(@ApiParam(value = "Номер проекта") @PathVariable Long id){
+        try {
+            List<Post> posts = projectService.getAllPosts(id);
+            return new ResponseEntity<>(posts, HttpStatus.OK);
+        } catch (Exception exception) {
+            log.error("Не удалось получить посты для проекта с идентификатором: {}", id, exception);
+            return new ResponseEntity<>("Не удалось получить посты. Подробности: " + exception.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping
     @ApiOperation(value = "Добавление проекта")
     public ResponseEntity<Project> add(@RequestBody Project project){
@@ -77,6 +90,20 @@ public class ProjectController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (Exception ex){
             log.error("Не удалось добавить фотографию", ex);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @PostMapping("/{id}/post")
+    @ApiOperation(value = "Добавление поста")
+    public ResponseEntity<Post> addPost(@PathVariable Long id, @RequestBody Post post){
+        try{
+            Post addedPost = projectService.addPost(id, post);
+            return new ResponseEntity<>(addedPost, HttpStatus.CREATED);
+        } catch (NullPointerException ex){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (Exception ex){
+            log.error("Не удалось добавить пост", ex);
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }

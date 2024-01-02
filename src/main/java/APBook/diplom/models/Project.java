@@ -30,6 +30,8 @@ public class Project {
     private String logo;
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Photo> photos;
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
+    private List<Post> posts;
 //    private List<String> Videos;
 
 }

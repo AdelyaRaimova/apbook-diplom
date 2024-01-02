@@ -1,14 +1,16 @@
 package APBook.diplom.service;
 
 import APBook.diplom.models.Photo;
+import APBook.diplom.models.Post;
 import APBook.diplom.models.Project;
 import APBook.diplom.repository.ProjectRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+
 import java.util.List;
-import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -16,18 +18,26 @@ import java.util.stream.Stream;
 public class ProjectService {
     private final ProjectRepository projectRepository;
     private final PhotoService photoService;
+    private final PostService postService;
 
-    public ProjectService(ProjectRepository projectRepository, PhotoService photoService) {
+    public ProjectService(ProjectRepository projectRepository, PhotoService photoService, PostService postService) {
         this.projectRepository = projectRepository;
         this.photoService = photoService;
+        this.postService = postService;
     }
 
     public List<Project> getAll() {
         return projectRepository.findAll();
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public Project get(long id) {
-        return projectRepository.findById(id).get();
+        Project project = projectRepository.findById(id).orElse(null);
+        if(project == null){
+            log.error("Проект не найден");
+            return null;
+        }
+        return project;
     }
 
     public List<Photo> getAllPhotos(long id) {
@@ -46,15 +56,23 @@ public class ProjectService {
         return project;
     }
 
-    public Photo addPhoto(Long id, Photo photo) {
+    public List<Post> getAllPosts(long id) {
         Project project = projectRepository.findById(id).orElse(null);
-        if(project == null){
-            log.error("Проект не найден");
-            return null;
-        }
+        return project.getPosts();
+    }
+
+    public Photo addPhoto(Long id, Photo photo) {
+        Project project = this.get(id);
         photo.setProject(project);
         photoService.add(photo);
         return photo;
+    }
+
+    public Post addPost(Long id, Post post) {
+        Project project = this.get(id);
+        post.setProject(project);
+        postService.add(post);
+        return post;
     }
 
     public Project update(long id, Project project) {
