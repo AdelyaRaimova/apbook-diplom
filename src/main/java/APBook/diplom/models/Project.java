@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -33,14 +34,20 @@ public class Project {
     private String name;
     private String description;
     private String logo;
+
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Photo> photos;
+
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Post> posts;
+
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name="user_id")
     private User author;
+
+    @OneToMany(mappedBy = "project")
+    private Set<UserProject> subscribers;
 //    private List<String> Videos;
 
 }
