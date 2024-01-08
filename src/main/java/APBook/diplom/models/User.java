@@ -5,6 +5,8 @@ import lombok.Setter;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -16,6 +18,7 @@ import java.util.List;
 @Table(name = "users")
 public class User {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
     @Column(name = "first_name")
@@ -27,6 +30,6 @@ public class User {
     private String photo;
     private String email;
     private String password;
-    @OneToMany(mappedBy = "project")
+    @OneToMany(mappedBy = "author")
     private List<Project> projects;
 }

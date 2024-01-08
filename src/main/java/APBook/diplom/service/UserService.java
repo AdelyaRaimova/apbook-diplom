@@ -1,8 +1,11 @@
 package APBook.diplom.service;
 
+import APBook.diplom.models.User;
 import APBook.diplom.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -13,5 +16,35 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    public User show(long id){
+        return userRepository.findById(id).orElse(null);
+    }
 
+    public List<User> showAll(){
+        return userRepository.findAll();
+    }
+
+    public User add(User user){
+        return userRepository.save(user);
+    }
+
+    public User update(long id, User user){
+        User uUser = userRepository.findById(id).orElse(null);
+        if(uUser == null){
+            return null;
+        }
+        uUser.setAge(user.getAge());
+        uUser.setEmail(user.getEmail());
+        uUser.setFirstName(user.getFirstName());
+        uUser.setPassword(user.getPassword());
+        uUser.setPhoto(user.getPhoto());
+        uUser.setProjects(user.getProjects());
+        uUser.setSecondName(user.getSecondName());
+        userRepository.save(uUser);
+        return uUser;
+    }
+
+    public void delete(long id){
+        userRepository.deleteById(id);
+    }
 }
