@@ -4,6 +4,7 @@ import APBook.diplom.models.Project;
 import APBook.diplom.models.User;
 import APBook.diplom.service.UserService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
@@ -31,11 +32,29 @@ public class UserController {
     }
 
     @GetMapping
+    @ApiOperation(value = "Получение всех пользователей")
     public List<User> showAll(){
         return userService.showAll();
     }
 
+    @GetMapping("/{id}")
+    @ApiOperation(value = "Получение пользователя")
+    public ResponseEntity<?> show(@PathVariable Long id){
+        try{
+            User user = userService.show(id);
+            if(user == null){
+                return new ResponseEntity<>("Пользователь не найден", HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
+        }catch (Exception exception){
+            log.error("Не удалось получить пользователя с идентификатором: {}", id, exception );
+            return new ResponseEntity("Не удалось получить пользователя", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
     @PostMapping
+    @ApiOperation(value = "Добавление пользователя")
     public ResponseEntity<User> add(@RequestBody User user){
         try {
             User addedUser = userService.add(user);
@@ -47,6 +66,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+    @ApiOperation(value = "Изменение пользователя")
     public ResponseEntity<?> update(@PathVariable Long id,@RequestBody User user){
         try {
             if (user.getId().equals(id)){
@@ -63,6 +83,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
+    @ApiOperation(value = "Удаление пользователя")
     public ResponseEntity<String> delete(@PathVariable Long id){
         try{
             userService.delete(id);
