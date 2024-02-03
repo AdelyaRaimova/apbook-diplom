@@ -1,5 +1,7 @@
 package APBook.diplom.contoller;
 
+import APBook.diplom.dto.ProjectDto;
+import APBook.diplom.mapper.ProjectMapper;
 import APBook.diplom.models.Photo;
 import APBook.diplom.models.Post;
 import APBook.diplom.models.Project;
@@ -13,7 +15,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -22,9 +26,11 @@ import java.util.List;
 @Api(tags = "Проекты")
 public class ProjectController {
     private final ProjectService projectService;
+    private final ProjectMapper projectMapper;
 
-    public ProjectController(ProjectService projectService) {
+    public ProjectController(ProjectService projectService, ProjectMapper projectMapper) {
         this.projectService = projectService;
+        this.projectMapper = projectMapper;
     }
 
     @GetMapping()
@@ -33,6 +39,15 @@ public class ProjectController {
         return projectService.getAll();
     }
 
+    @GetMapping("/list")
+    @ApiOperation(value = "Получение всех проектов для отображение в списке")
+    public List<ProjectDto> showAllForList(){
+        List<Project> projects = projectService.getAll();
+        List<ProjectDto> userDtos = projects.stream()
+                .map(projectMapper::toDto)
+                .collect(Collectors.toList());
+        return userDtos;
+    }
     @GetMapping("/{id}")
     @ApiOperation(value = "Получение одного проекта")
     public ResponseEntity<Project> show(@PathVariable Long id){
