@@ -1,7 +1,9 @@
 package APBook.diplom.contoller;
 
+import APBook.diplom.models.Category;
 import APBook.diplom.models.Project;
 import APBook.diplom.models.User;
+import APBook.diplom.models.UserCategory;
 import APBook.diplom.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Set;
 
 @RestController
 @Slf4j
@@ -81,7 +84,6 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
-
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Удаление пользователя")
     public ResponseEntity<String> delete(@PathVariable Long id){

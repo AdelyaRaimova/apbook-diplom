@@ -35,6 +35,10 @@ public class User {
     private String email;
     private String password;
 
+    @Column(name = "selected_categories")
+    @OneToMany(mappedBy = "category")
+    private Set<UserCategory> selectedCategories;
+
     @OneToMany(mappedBy = "author")
     private List<Project> projects;
 

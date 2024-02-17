@@ -54,6 +54,11 @@ public class Project {
     @JoinColumn(name="user_id")
     private User author;
 
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name="category_id")
+    private User category;
+
     @OneToMany(mappedBy = "project")
     private Set<UserProject> subscribers;
 //    private List<String> Videos;

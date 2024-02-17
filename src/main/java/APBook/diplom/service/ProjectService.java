@@ -79,7 +79,17 @@ public class ProjectService {
         Project uProject = projectRepository.findById(id).get();
         uProject.setName(project.getName());
         uProject.setDescription(project.getDescription());
+        uProject.setAddress(project.getAddress());
+        uProject.setAuthor(project.getAuthor());
+        uProject.setStartDate(project.getStartDate());
+        uProject.setEndDate(project.getEndDate());
+        uProject.setLogo(project.getLogo());
+        uProject.setIsOnline(project.getIsOnline());
+        uProject.setPhotos(project.getPhotos());
+        uProject.setPosts(project.getPosts());
+        uProject.setSubscribers(project.getSubscribers());
         projectRepository.save(uProject);
+
         return uProject;
     }
 
