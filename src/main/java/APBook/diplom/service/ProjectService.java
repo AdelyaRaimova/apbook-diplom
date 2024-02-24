@@ -1,8 +1,6 @@
 package APBook.diplom.service;
 
-import APBook.diplom.models.Photo;
-import APBook.diplom.models.Post;
-import APBook.diplom.models.Project;
+import APBook.diplom.models.*;
 import APBook.diplom.repository.ProjectRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -30,6 +30,16 @@ public class ProjectService {
 
     public List<Project> getAll() {
         return projectRepository.findAll();
+    }
+
+    public List<Project> getAllForNews(Long id){
+        Set<UserCategory> userCategorySet = userService.show(id).getSelectedCategories();
+        Set<Category> categories = userCategorySet.stream()
+                .map(UserCategory::getCategory)
+                .collect(Collectors.toSet());
+        return projectRepository.findAll().stream()
+                .filter(x-> categories.contains(x.getCategory()))
+                .collect(Collectors.toList());
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

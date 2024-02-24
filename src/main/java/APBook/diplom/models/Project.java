@@ -57,7 +57,7 @@ public class Project {
     @JsonIgnore
     @ManyToOne
     @JoinColumn(name="category_id")
-    private User category;
+    private Category category;
 
     @OneToMany(mappedBy = "project")
     private Set<UserProject> subscribers;

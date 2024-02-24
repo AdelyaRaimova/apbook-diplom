@@ -41,12 +41,12 @@ public class ProjectController {
 
     @GetMapping("/list")
     @ApiOperation(value = "Получение всех проектов для отображение в списке")
-    public List<ProjectDto> showAllForList(){
-        List<Project> projects = projectService.getAll();
-        List<ProjectDto> userDtos = projects.stream()
+    public List<ProjectDto> showAllForList(@RequestParam Long id){
+        List<Project> projects = projectService.getAllForNews(id);
+        List<ProjectDto> projectDtos = projects.stream()
                 .map(projectMapper::toDto)
                 .collect(Collectors.toList());
-        return userDtos;
+        return projectDtos;
     }
     @GetMapping("/{id}")
     @ApiOperation(value = "Получение одного проекта")
