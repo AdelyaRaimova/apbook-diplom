@@ -53,7 +53,21 @@ public class UserController {
             log.error("Не удалось получить пользователя с идентификатором: {}", id, exception );
             return new ResponseEntity("Не удалось получить пользователя", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
 
+    @GetMapping("/auth/{email}")
+    @ApiOperation(value = "Получение пользователя по email")
+    public ResponseEntity<?> auth(@PathVariable String email){
+        try{
+            User user = userService.auth(email);
+            if(user == null){
+                return new ResponseEntity<>("Пользователь не найден", HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(user, HttpStatus.NOT_FOUND);
+        }catch (Exception exception){
+            log.error("Не удалось получить пользователя с почтой: {}", email, exception );
+            return new ResponseEntity("Не удалось получить пользователя", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @PostMapping
