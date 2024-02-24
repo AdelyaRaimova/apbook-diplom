@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @Slf4j
 @RequestMapping("/api/post")
@@ -34,6 +36,18 @@ public class PostController {
             }
         } catch (Exception exception){
             log.error("Не удалось получить пост с идентификатором: {}", id, exception );
+            return new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping()
+    @ApiOperation(value = "Получение всех постов пользователя")
+    public ResponseEntity<?> showNews(@RequestParam Long user){
+        try {
+            List<Post> news = postService.showNews(user);
+            return new ResponseEntity<>(news, HttpStatus.OK);
+        } catch (Exception exception){
+            log.error("Не удалось получить посты у пользователя: {}", user, exception );
             return new ResponseEntity(exception.getMessage(), HttpStatus.NOT_FOUND);
         }
     }
