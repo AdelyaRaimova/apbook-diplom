@@ -20,6 +20,7 @@ public class UserService {
     }
 
     public User show(long id){
+
         return userRepository.findById(id).orElse(null);
     }
 

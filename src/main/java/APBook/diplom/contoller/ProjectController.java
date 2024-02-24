@@ -85,9 +85,9 @@ public class ProjectController {
 
     @PostMapping
     @ApiOperation(value = "Добавление проекта")
-    public ResponseEntity<Project> add(@RequestBody Project project){
+    public ResponseEntity<Project> add(@RequestBody Project project, @RequestParam Long userId){
         try {
-            Project addedProject = projectService.add(project);
+            Project addedProject = projectService.add(project, userId);
             return new ResponseEntity<>(addedProject, HttpStatus.CREATED);
         } catch (Exception exception) {
             log.error("Не удалось добавить проект", exception);

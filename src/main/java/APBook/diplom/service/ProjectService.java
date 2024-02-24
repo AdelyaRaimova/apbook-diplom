@@ -19,11 +19,13 @@ public class ProjectService {
     private final ProjectRepository projectRepository;
     private final PhotoService photoService;
     private final PostService postService;
+    private final UserService userService;
 
-    public ProjectService(ProjectRepository projectRepository, PhotoService photoService, PostService postService) {
+    public ProjectService(ProjectRepository projectRepository, PhotoService photoService, PostService postService, UserService userService) {
         this.projectRepository = projectRepository;
         this.photoService = photoService;
         this.postService = postService;
+        this.userService = userService;
     }
 
     public List<Project> getAll() {
@@ -45,13 +47,14 @@ public class ProjectService {
         return project.getPhotos();
     }
 
-    public Project add(Project project) {
+    public Project add(Project project, Long userId) {
         List<Photo> photos = project.getPhotos();
         if (photos != null) {
             for (Photo photo : photos) {
                 photo.setProject(project);
             }
         }
+        project.setAuthor(userService.show(userId));
         projectRepository.save(project);
         return project;
     }
