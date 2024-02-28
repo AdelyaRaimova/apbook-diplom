@@ -1,5 +1,6 @@
 package APBook.diplom.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,6 +27,7 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Project> projects;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private Set<UserCategory> users;
 }
