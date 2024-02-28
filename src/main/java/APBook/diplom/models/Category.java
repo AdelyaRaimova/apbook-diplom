@@ -28,7 +28,7 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private List<Project> projects;
 
-
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private Set<UserCategory> users;
 }
