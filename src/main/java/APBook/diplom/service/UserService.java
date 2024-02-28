@@ -28,7 +28,7 @@ public class UserService {
     }
 
     public User auth(String email){
-        return userRepository.findByEmail(email);
+        return userRepository.findByEmail(email).orElse(null);
     }
 
     public List<Project> showSubscriptions(Long id){
@@ -43,6 +43,10 @@ public class UserService {
     }
 
     public User add(User user){
+        User user1 = userRepository.findByEmail(user.getEmail()).orElse(null);
+        if(user1 != null){
+            return null;
+        }
         return userRepository.save(user);
     }
 

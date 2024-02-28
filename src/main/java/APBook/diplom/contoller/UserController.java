@@ -65,9 +65,12 @@ public class UserController {
 
     @PostMapping
     @ApiOperation(value = "Добавление пользователя")
-    public ResponseEntity<User> add(@RequestBody User user){
+    public ResponseEntity<?> add(@RequestBody User user){
         try {
             User addedUser = userService.add(user);
+            if(addedUser == null){
+                return new ResponseEntity<>("Этот email уже используется", HttpStatus.BAD_REQUEST);
+            }
             return new ResponseEntity<>(addedUser, HttpStatus.CREATED);
         } catch (Exception exception) {
             log.error("Не удалось добавить пользователя", exception);
