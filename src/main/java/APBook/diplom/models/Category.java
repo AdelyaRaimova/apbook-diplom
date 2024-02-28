@@ -24,10 +24,11 @@ public class Category {
 
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "category")
     private List<Project> projects;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "user")
     private Set<UserCategory> users;
 }
