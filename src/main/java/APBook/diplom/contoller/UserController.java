@@ -94,6 +94,21 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    @PutMapping("/category/{id}")
+    @ApiOperation(value = "Изменение категорий пользователя")
+    public ResponseEntity<?> update(@PathVariable Long id,@RequestBody Set<Category> categories){
+        try {
+            User updatedUser = userService.updateCategories(id, categories);
+            if(updatedUser == null){
+                return new ResponseEntity<>("Пользователь не найден", HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+        } catch (Exception exception) {
+            log.error("Не удалось обновить категории пользователя", exception);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Удаление пользователя")
     public ResponseEntity<String> delete(@PathVariable Long id){

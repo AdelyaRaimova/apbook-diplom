@@ -1,11 +1,13 @@
 package APBook.diplom.service;
 
 import APBook.diplom.models.*;
+import APBook.diplom.repository.UserCategoryRepository;
 import APBook.diplom.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -14,9 +16,11 @@ import java.util.stream.Collectors;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private final UserCategoryRepository userCategoryRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, UserCategoryRepository userCategoryRepository) {
         this.userRepository = userRepository;
+        this.userCategoryRepository = userCategoryRepository;
     }
 
     public User show(long id){
@@ -66,13 +70,23 @@ public class UserService {
         return uUser;
     }
 
-    public User updateCategories(long id, Set<UserCategory> categories){
+    public User updateCategories(long id, Set<Category> newCategories){
         User uUser = userRepository.findById(id).orElse(null);
         if(uUser == null){
             return null;
         }
-        uUser.setSelectedCategories(categories);
-        userRepository.save(uUser);
+        Set<Category> oldCategories = userCategoryRepository.findUserCategoriesByUserId(id)
+                .stream()
+                .map(UserCategory::getCategory)
+                .collect(Collectors.toSet());
+        if(newCategories.equals(oldCategories)){
+            return uUser;
+        }
+        Set<Category> thirdCategories = new HashSet<>(newCategories);
+        newCategories.removeAll(oldCategories);
+        oldCategories.removeAll(thirdCategories);
+        newCategories.forEach(category -> userCategoryRepository.save(new UserCategory(uUser, category)));
+        oldCategories.forEach(category -> userCategoryRepository.delete(new UserCategory(uUser, category)));
         return uUser;
     }
 
