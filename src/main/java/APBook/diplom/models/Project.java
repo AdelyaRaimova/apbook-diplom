@@ -51,10 +51,15 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Post> posts;
 
-    @JsonIgnore
+
     @ManyToOne
     @JoinColumn(name="user_id")
     private User author;
+
+    @JsonGetter("author")
+    public Long getUserId() {
+        return author.getId();
+    }
 
 
     @ManyToOne
