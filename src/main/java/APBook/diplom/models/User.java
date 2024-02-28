@@ -1,5 +1,6 @@
 package APBook.diplom.models;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Setter
@@ -44,4 +46,11 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<UserProject> subscriptions;
+
+    @JsonGetter("subscriptions")
+    public List<Long> getProjectIds() {
+        return subscriptions.stream()
+                .map(userProject -> userProject.getProject().getId())
+                .collect(Collectors.toList());
+    }
 }

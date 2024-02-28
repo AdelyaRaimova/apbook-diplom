@@ -34,7 +34,7 @@ public class UserService {
     public List<Project> showSubscriptions(Long id){
         List<Project> projectList = new ArrayList<>();
         User user = userRepository.findById(id).orElse(null);
-        Set<UserProject> list =  user.getSubscriptions();
+        Set<UserProject> list = user.getSubscriptions();
         Set<Project> projects = list.stream()
                 .map(UserProject::getProject)
                 .collect(Collectors.toSet());

@@ -95,6 +95,17 @@ public class ProjectController {
         }
     }
 
+    @PostMapping("/subscribe")
+    public ResponseEntity<?> subscribe(@RequestParam Long userId, @RequestParam Long projectId){
+        try {
+            projectService.subscribe(userId, projectId);
+            return new ResponseEntity<>("Пользователь подписался", HttpStatus.CREATED);
+        } catch (Exception exception) {
+            log.error("Не удалось подписать пользователя", exception);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @PostMapping("/{id}/photo")
     @ApiOperation(value = "Добавление фотографии")
     public ResponseEntity<Photo> addPhoto(@PathVariable Long id, @RequestBody Photo photo){
@@ -148,6 +159,16 @@ public class ProjectController {
             return new ResponseEntity<>("Проект удален", HttpStatus.OK);
         } catch (EmptyResultDataAccessException ex){
             return new ResponseEntity<>("Проект не найден", HttpStatus.NOT_FOUND);
+        }
+    }
+    @DeleteMapping("/unsubscribe")
+    public ResponseEntity<?> unsubscribe(@RequestParam Long userId, @RequestParam Long projectId){
+        try {
+            projectService.unsubscribe(userId, projectId);
+            return new ResponseEntity<>("Пользователь отписался", HttpStatus.OK);
+        } catch (Exception exception) {
+            log.error("Не удалось отписать пользователя", exception);
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

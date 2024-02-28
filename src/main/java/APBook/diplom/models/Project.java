@@ -1,6 +1,7 @@
 package APBook.diplom.models;
 //Assistance projects book
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.EqualsAndHashCode;
@@ -12,6 +13,7 @@ import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Setter
 @Getter
@@ -61,6 +63,12 @@ public class Project {
 
     @OneToMany(mappedBy = "project")
     private Set<UserProject> subscribers;
-//    private List<String> Videos;
+
+    @JsonGetter("subscribers")
+    public List<Long> getUserIds() {
+        return subscribers.stream()
+                .map(userProject -> userProject.getUser().getId())
+                .collect(Collectors.toList());
+    }
 
 }

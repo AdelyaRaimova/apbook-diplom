@@ -2,6 +2,7 @@ package APBook.diplom.service;
 
 import APBook.diplom.models.*;
 import APBook.diplom.repository.ProjectRepository;
+import APBook.diplom.repository.UserProjectRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -20,12 +21,14 @@ public class ProjectService {
     private final PhotoService photoService;
     private final PostService postService;
     private final UserService userService;
+    private final UserProjectRepository userProjectRepository;
 
-    public ProjectService(ProjectRepository projectRepository, PhotoService photoService, PostService postService, UserService userService) {
+    public ProjectService(ProjectRepository projectRepository, PhotoService photoService, PostService postService, UserService userService, UserProjectRepository userProjectRepository) {
         this.projectRepository = projectRepository;
         this.photoService = photoService;
         this.postService = postService;
         this.userService = userService;
+        this.userProjectRepository = userProjectRepository;
     }
 
     public List<Project> getAll() {
@@ -86,6 +89,26 @@ public class ProjectService {
         post.setProject(project);
         postService.add(post);
         return post;
+    }
+    public void subscribe(Long id, Long projectId){
+        Project project = projectRepository.findById(projectId).orElse(null);
+        Set<UserProject> set = project.getSubscribers();
+        UserProject userProject = new UserProject();
+        userProject.setUser(userService.show(id));
+        userProject.setProject(project);
+        set.add(userProject);
+        project.setSubscribers(set);
+        User user = userService.show(id);
+        set = user.getSubscriptions();
+        user.setSubscriptions(set);
+        userService.update(id, user);
+        projectRepository.save(project);
+        userProjectRepository.save(userProject);
+    }
+
+    public void unsubscribe(Long userId, Long projectId){
+        UserProject userProject = userProjectRepository.findUserProjectByUserIdAndProjectId(userId, projectId);
+        userProjectRepository.delete(userProject);
     }
 
     public Project update(long id, Project project) {
