@@ -22,12 +22,16 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @Table(name="projects")
 public class Project {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "project_id")
     private Long id;
+
     private String name;
+
     private String description;
+
     private String logo;
 
     @Column(name = "is_online")
@@ -51,7 +55,6 @@ public class Project {
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL)
     private List<Post> posts;
 
-
     @ManyToOne
     @JoinColumn(name="user_id")
     private User author;
@@ -60,7 +63,6 @@ public class Project {
     public Long getUserId() {
         return author.getId();
     }
-
 
     @ManyToOne
     @JoinColumn(name="category_id")
