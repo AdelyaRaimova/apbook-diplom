@@ -9,4 +9,5 @@ import java.util.Set;
 
 public interface UserCategoryRepository extends JpaRepository<UserCategory, Long> {
     List<UserCategory> findUserCategoriesByUserId(Long id);
+    UserCategory findUserCategoryByUserIdAndCategoryId(Long userId, Long categoryId);
 }

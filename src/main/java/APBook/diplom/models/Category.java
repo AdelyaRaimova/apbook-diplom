@@ -1,10 +1,7 @@
 package APBook.diplom.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -14,7 +11,6 @@ import java.util.Set;
 @Setter
 @Getter
 @Entity
-@EqualsAndHashCode
 @NoArgsConstructor
 @Table(name="categories")
 public class Category {

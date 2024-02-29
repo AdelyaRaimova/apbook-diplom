@@ -6,10 +6,7 @@ import APBook.diplom.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -86,7 +83,16 @@ public class UserService {
         newCategories.removeAll(oldCategories);
         oldCategories.removeAll(thirdCategories);
         newCategories.forEach(category -> userCategoryRepository.save(new UserCategory(uUser, category)));
-        oldCategories.forEach(category -> userCategoryRepository.delete(new UserCategory(uUser, category)));
+        if(oldCategories.isEmpty()){
+            return uUser;
+        }
+        for(Category category: oldCategories){
+            UserCategory userCategory = userCategoryRepository.findUserCategoryByUserIdAndCategoryId(id, category.getId());
+            if(userCategory == null){
+                continue;
+            }
+            userCategoryRepository.delete(userCategory);
+        }
         return uUser;
     }
 
