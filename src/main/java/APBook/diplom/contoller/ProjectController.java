@@ -118,9 +118,12 @@ public class ProjectController {
         try {
             projectService.subscribe(userId, projectId);
             return new ResponseEntity<>("Пользователь подписался", HttpStatus.CREATED);
+        } catch (RuntimeException exception){
+            log.error("Пользователь уже подписан", exception);
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception exception) {
             log.error("Не удалось подписать пользователя", exception);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Не удалось подписать пользователя", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -184,9 +187,12 @@ public class ProjectController {
         try {
             projectService.unsubscribe(userId, projectId);
             return new ResponseEntity<>("Пользователь отписался", HttpStatus.OK);
+        } catch (RuntimeException exception){
+            log.error("Пользователь не подписан", exception);
+            return new ResponseEntity<>(exception.getMessage(), HttpStatus.BAD_REQUEST);
         } catch (Exception exception) {
             log.error("Не удалось отписать пользователя", exception);
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>("Не удалось отписать пользователя", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

@@ -100,24 +100,25 @@ public class ProjectService {
         postService.add(post);
         return post;
     }
+
     public void subscribe(Long id, Long projectId){
         Project project = projectRepository.findById(projectId).orElse(null);
-        Set<UserProject> set = project.getSubscribers();
         UserProject userProject = new UserProject();
         userProject.setUser(userService.show(id));
         userProject.setProject(project);
-        set.add(userProject);
-        project.setSubscribers(set);
-        User user = userService.show(id);
-        set = user.getSubscriptions();
-        user.setSubscriptions(set);
-        userService.update(id, user);
-        projectRepository.save(project);
-        userProjectRepository.save(userProject);
+        if (userProjectRepository.findUserProjectByUserIdAndProjectId(userService.show(id).getId(), project.getId()) == null){
+            userProjectRepository.save(userProject);
+        }
+        else {
+            throw new RuntimeException("Пользователь уже подписан");
+        }
     }
 
     public void unsubscribe(Long userId, Long projectId){
         UserProject userProject = userProjectRepository.findUserProjectByUserIdAndProjectId(userId, projectId);
+        if(userProject == null){
+            throw new RuntimeException("Пользователь не подписан");
+        }
         userProjectRepository.delete(userProject);
     }
 
