@@ -48,6 +48,24 @@ public class ProjectController {
                 .collect(Collectors.toList());
         return projectDtos;
     }
+
+    @GetMapping("/subscriptions")
+    @ApiOperation(value = "Получение всех подписок для отображение в списке")
+    public ResponseEntity<List<ProjectDto>> showAllSubscriptionsForList(@RequestParam Long id){
+        try {
+            List<Project> projects = projectService.getAllSubscriptions(id);
+            if (projects == null){
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+            List<ProjectDto> projectDtos = projects.stream()
+                    .map(projectMapper::toDto)
+                    .collect(Collectors.toList());
+            return new ResponseEntity(projectDtos, HttpStatus.OK);
+        } catch (Exception exception){
+            log.error("Не удалось получить подписки у пользователя: {}", id, exception );
+            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
     @GetMapping("/{id}")
     @ApiOperation(value = "Получение одного проекта")
     public ResponseEntity<Project> show(@PathVariable Long id){

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -43,6 +44,15 @@ public class ProjectService {
         return projectRepository.findAll().stream()
                 .filter(x-> categories.contains(x.getCategory()))
                 .collect(Collectors.toList());
+    }
+
+    public List<Project> getAllSubscriptions(Long id){
+        User user = userService.show(id);
+        if(user == null){
+            return null;
+        }
+        return user.getSubscriptions().stream()
+                .map(UserProject::getProject).distinct().collect(Collectors.toList());
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
