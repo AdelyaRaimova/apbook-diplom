@@ -97,7 +97,22 @@ public class ProjectService {
     public Post addPost(Long id, Post post) {
         Project project = this.get(id);
         post.setProject(project);
-        postService.add(post);
+        List<Photo> photos = post.getPhotos();
+        List<Photo> addedPhotos = new ArrayList<>();
+        if(!photos.isEmpty()){
+            photos.forEach(photo -> {
+                photo.setProject(project);
+                Photo photo1 = photoService.add(photo);
+                addedPhotos.add(photo1);
+            });
+        }
+        Post addedPost = postService.add(post);
+        if(!addedPhotos.isEmpty()){
+            addedPhotos.forEach(photo -> {
+                photo.setPost(addedPost);
+                photoService.update(photo.getId(), photo);
+            });
+        }
         return post;
     }
 

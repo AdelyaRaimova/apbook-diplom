@@ -34,6 +34,7 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Photo> photos;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name="project_id")
     private Project project;

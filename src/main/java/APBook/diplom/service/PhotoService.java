@@ -20,8 +20,17 @@ public class PhotoService {
         return photoRepository.findById(id).orElse(null);
     }
 
-    public void add(Photo photo){
-        photoRepository.save(photo);
+    public Photo add(Photo photo){
+        return photoRepository.save(photo);
+    }
+
+    public Photo update(Long id, Photo photo){
+        Photo photo1 = photoRepository.findById(id).orElse(null);
+        photo.setId(photo1.getId());
+        photo.setLink(photo1.getLink());
+        photo.setProject(photo1.getProject());
+        photo.setPost(photo1.getPost());
+        return photoRepository.save(photo);
     }
 
     public void delete(Long id){
