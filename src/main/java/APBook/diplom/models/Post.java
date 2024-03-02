@@ -15,6 +15,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,6 +31,14 @@ public class Post {
     private Long id;
 
     private String text;
+
+    @JsonIgnore
+    private LocalDateTime creationDate;
+
+    @JsonGetter("creationDate")
+    public LocalDateTime getCreationDate() {
+        return creationDate;
+    }
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Photo> photos;

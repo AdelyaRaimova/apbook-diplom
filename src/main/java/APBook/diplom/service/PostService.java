@@ -6,6 +6,8 @@ import APBook.diplom.repository.PostRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -27,6 +29,7 @@ public class PostService {
         for(Project project: userService.showSubscriptions(id)){
             posts.addAll(project.getPosts());
         }
+        posts.sort(Comparator.comparing(Post::getCreationDate));
         return posts;
     }
 
