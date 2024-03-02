@@ -34,12 +34,16 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Photo> photos;
 
-
     @ManyToOne
     @JoinColumn(name="project_id")
     private Project project;
     @JsonGetter("project")
     public String getPostName() {
         return project.getName();
+    }
+
+    @JsonGetter("projectLogo")
+    public String getProjectLogo() {
+        return project.getLogo();
     }
 }

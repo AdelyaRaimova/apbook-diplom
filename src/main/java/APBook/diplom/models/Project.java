@@ -4,6 +4,7 @@ package APBook.diplom.models;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -77,5 +78,4 @@ public class Project {
                 .map(userProject -> userProject.getUser().getId())
                 .collect(Collectors.toList());
     }
-
 }

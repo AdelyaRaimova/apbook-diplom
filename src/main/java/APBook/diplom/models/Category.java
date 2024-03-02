@@ -29,6 +29,11 @@ public class Category {
     @OneToMany(mappedBy = "category")
     private Set<UserCategory> users;
 
+    public Category(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
