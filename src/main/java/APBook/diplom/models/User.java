@@ -41,7 +41,7 @@ public class User {
     private String email;
     private String password;
 
-    @JsonIgnore
+
     @Column(name = "selected_categories")
     @OneToMany(mappedBy = "user")
     private Set<UserCategory> selectedCategories;
@@ -53,11 +53,11 @@ public class User {
                 .collect(Collectors.toList());
     }
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "author")
     private List<Project> projects;
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "user")
     private Set<UserProject> subscriptions;
 
