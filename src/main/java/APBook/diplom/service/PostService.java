@@ -5,6 +5,7 @@ import APBook.diplom.models.Project;
 import APBook.diplom.repository.PostRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -34,6 +35,7 @@ public class PostService {
     }
 
     public Post add(Post post){
+        post.setCreationDate(LocalDateTime.now());
         return postRepository.save(post);
     }
 
