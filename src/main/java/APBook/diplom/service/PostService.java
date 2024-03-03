@@ -30,7 +30,7 @@ public class PostService {
         for(Project project: userService.showSubscriptions(id)){
             posts.addAll(project.getPosts());
         }
-        posts.sort(Comparator.comparing(Post::getCreationDate));
+        Collections.sort(posts, Comparator.comparing(Post::getCreationDate));
         return posts;
     }
 
